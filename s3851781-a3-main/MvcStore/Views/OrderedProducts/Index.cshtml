@@ -1,0 +1,22 @@
+﻿@model OrderedProductsViewModel
+@{
+    ViewData["Title"] = "Ordered Products";
+    var products = Model.Products;
+}
+
+<h1>Ordered Products</h1>
+<div class="p-2"></div>
+@using (Html.BeginForm("Index", "OrderedProducts", FormMethod.Get))
+{
+    <div class="form-group">
+        <label for="productName">Filter by Product</label>
+        @Html.DropDownList("productName", products.Distinct().Select(x => new SelectListItem { Text = x.Name, Value = x.Name }), "All Products",
+    new { @class = "form-control", id = "productName" })
+        
+    </div>
+    <button type="submit" class="btn btn-primary">Filter</button>
+}
+    
+<div class="p-4"></div>
+
+<partial name="_OrderedProductsTable" for="OrderedProducts" />

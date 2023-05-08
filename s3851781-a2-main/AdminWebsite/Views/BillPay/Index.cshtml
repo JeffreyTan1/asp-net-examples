@@ -1,0 +1,101 @@
+﻿@model IEnumerable<BillPayDTO>
+@{
+    ViewData["Title"] = "BillPays";
+}
+@functions{
+    public string GetBillPayTypeString(string accountType) {
+        switch (accountType) {
+            case "O":
+                return "One Time";
+            case "M":
+                return "Monthly";
+            default:
+                return "Unknown";
+        }
+    }
+
+    public string GetMoneyString(decimal amount)
+    {
+        return amount.ToString("C");
+    }
+}
+
+<h1>BillPays Management</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.BillPayID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AccountNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PayeeID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Amount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ScheduleTimeUtc)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Period)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Active)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Failed)
+            </th>
+            
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var item in Model) {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BillPayID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AccountNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PayeeID)
+                </td>
+                <td>
+                    @GetMoneyString(item.Amount)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ScheduleTimeUtc)
+                </td>
+                <td>
+                    @GetBillPayTypeString(item.Period)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Active)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Failed)
+                </td>
+                <td>
+                    <form asp-action="ToggleBillPayActive">
+                        <input id="id" type="hidden" name="id" value="@item.BillPayID" />
+                        <button type="submit" class="btn btn-primary">
+                            @if (item.Active)
+                            {
+                                    <span>Deactivate</span> 
+                            }
+                            else
+                            {
+                                    <span>Activate</span>
+                            }
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

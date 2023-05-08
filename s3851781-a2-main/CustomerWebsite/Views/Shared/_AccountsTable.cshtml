@@ -1,0 +1,35 @@
+﻿@model IEnumerable<Account>
+@using CustomerWebsite.Models.Types
+@functions {
+    public string GetAccountTypeString(string accountType) {
+        switch (accountType) {
+            case "C":
+                return "Checking";
+            case "S":
+                return "Savings";
+            default:
+                return "Unknown";
+        }
+    }
+}
+<table class="table">
+    <tr>
+        <th>@Html.DisplayNameFor(x => x.First().AccountNumber)</th>
+        <th>@Html.DisplayNameFor(x => x.First().AccountType)</th>
+        <th>Balance</th>
+        <th>Actions</th>
+    </tr>
+    @foreach(var account in Model) {
+        <tr>
+            <td>@Html.DisplayFor(x => account.AccountNumber)</td>
+            <td>@GetAccountTypeString(account.AccountType)</td>
+            <td>@account.GetBalanceString()</td>
+            <td>
+                <a class="btn btn-outline-primary btn-sm" asp-controller="Transaction" asp-action="Withdraw" asp-route-id="@account.AccountNumber">Withdraw</a>
+                <a class="btn btn-outline-primary btn-sm" asp-controller="Transaction" asp-action="Deposit" asp-route-id="@account.AccountNumber">Deposit</a>
+                <a class="btn btn-outline-primary btn-sm" asp-controller="Transaction" asp-action="Transfer" asp-route-id="@account.AccountNumber">Transfer</a>
+                <a class="btn btn-outline-primary btn-sm" asp-controller="Transaction" asp-action="MyStatements" asp-route-id="@account.AccountNumber">My Statements</a>
+            </td>
+        </tr>
+    }
+</table>

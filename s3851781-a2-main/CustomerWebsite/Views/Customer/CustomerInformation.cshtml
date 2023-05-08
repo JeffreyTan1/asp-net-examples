@@ -1,0 +1,68 @@
+﻿@model Customer
+@{
+    ViewData["Title"] = "Customer Information";
+}
+
+<div class="p-2"></div>
+<div>
+    <a asp-action="Index">Back to Accounts</a>
+</div>
+<div class="p-2"></div>
+
+<h1 class="display-4">Customer Information</h1>
+
+<div>
+    <p class="font-weight-bold">Name</p>
+    <p>@Model.Name</p>
+</div>
+
+<div>
+    <p class="font-weight-bold">TFN</p>
+    <p>@Model.TFN</p>
+</div>
+
+<div>
+    <p class="font-weight-bold">Address</p>
+    <p>@Model.Address</p>
+</div>
+<div>
+    <p class="font-weight-bold">City</p>
+    <p>@Model.City</p>
+</div>
+<div>
+    <p class="font-weight-bold">State</p>
+    <p>@Model.State</p>
+</div>
+<div>
+    <p class="font-weight-bold">PostCode</p>
+    <p>@Model.PostCode</p>
+</div>
+<div>
+    <p class="font-weight-bold">Mobile</p>
+    <p>@Model.Mobile</p>
+</div>
+<div>
+    <p class="font-weight-bold">Profile Picture</p>
+    @{
+        var hasProfilePicture = Context.Session.GetString("ImageBase64") != null && Context.Session.GetString("ImageBase64") != string.Empty;
+    }
+
+    <img src="@if(hasProfilePicture) {
+    @Context.Session.GetString("ImageBase64")
+    } else {
+    @Url.Content("~/img/default_user.png")
+    }" class="" style="width: 200px; height: 200px; object-fit: contain;" />
+</div>
+<div class="p-4">
+</div>
+
+<a asp-action="UpdateCustomerInformation" class="btn btn-primary">Update Customer Information</a>
+<a asp-action="UpdateProfilePicture" class="btn btn-primary">Update Profile Picture</a>
+<a asp-controller="Login" asp-action="UpdatePassword" class="btn btn-primary">Update Password</a>
+<form asp-action="DeleteProfilePicture">
+    <button type="submit" class="alert-danger btn-lg">Delete Profile Picture</button>
+</form>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

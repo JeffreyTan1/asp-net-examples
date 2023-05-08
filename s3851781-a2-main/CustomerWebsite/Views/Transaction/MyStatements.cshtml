@@ -1,0 +1,89 @@
+﻿@model MyStatementsViewModel
+@{
+    ViewData["Title"] = "My Statements";
+}
+
+@functions{
+    public string GetTransactionTypeString(string accountType) {
+        switch (accountType) {
+            case "S":
+                return "Service Charge";
+            case "W":
+                return "Withdrawal";
+            case "T":
+                return "Transfer";
+            case "D":
+                return "Deposit";
+            case "B":
+                return "Bill Payment";
+            default:
+                return "Unknown";
+        }
+    }
+
+    public string GetMoneyString(decimal amount)
+    {
+        return amount.ToString("C");
+    }
+}
+
+<div>
+    <div>
+        <a asp-controller ="Customer" asp-action="Index">Back to Accounts</a>
+    </div>
+
+    <h1 class="display-4">My Statements</h1>
+    <h3>Account @Model.AccountNumber</h3>
+    <h3>Balance: @GetMoneyString(Model.Balance)</h3>
+    <div class="p-2"></div>
+    <table id="statements" class="table table-striped table-bordered" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th>Transaction ID</th>
+                <th>Transaction Type</th>
+                <th>Account Number</th>
+                <th>Destination Account Number</th>
+                <th>Amount</th>
+                <th>Comment</th>
+                <th>Transaction Time</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                foreach (var transaction in Model.Transactions)
+                {
+                    <tr>
+                        <td>@transaction.TransactionID</td>
+                        <td>@GetTransactionTypeString(transaction.TransactionType)</td>
+                        <td>@transaction.AccountNumber</td>
+                        <td>@transaction.DestinationAccountNumber</td>
+                        <td>@GetMoneyString(transaction.Amount)</td>
+                        <td>@transaction.Comment</td>
+                        <td>@transaction.TransactionTimeUtc</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap4.min.js"></script>
+    <link rel="stylesheet" href=
+"https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/dataTables.bootstrap4.min.css" />
+    
+    <script>
+        $(document).ready(function() {
+            $('#statements').DataTable({
+                "pageLength": 4,
+                "order": [[0, 'desc']],
+                "lengthChange": false
+            });
+        } );
+    </script>
+}

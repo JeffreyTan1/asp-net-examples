@@ -1,0 +1,83 @@
+﻿@model IEnumerable<Payee>
+@{
+    ViewData["Title"] = "Payees";
+}
+
+<div>
+    <div>
+        <a asp-action="Index">Back to BillPay</a>
+    </div>
+    <h1 class="display-4">Payees</h1>
+    <div class="p-2"></div>
+    <a class="btn btn-primary" asp-action="CreatePayee">Create Payees</a>
+
+    <div class="modal fade" id="actionModal" tabindex="-1" role="dialog" aria-labelledby="actionModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="actionModalLabel">Create Payee</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    
+                    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <input type="submit" value="Deposit" class="btn btn-primary" />
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="p-4"></div>
+    <table id="payees" class="table table-striped table-bordered" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th>PayeeID</th>
+                <th>Name</th>
+                <th>Address</th>
+                <th>City</th>
+                <th>State</th>
+                <th>PostCode</th>
+                <th>Phone</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                foreach (var payee in Model)
+                {
+                    <tr>
+                        <td>@payee.PayeeID</td>
+                        <td>@payee.Name</td>
+                        <td>@payee.Address</td>
+                        <td>@payee.City</td>
+                        <td>@payee.State</td>
+                        <td>@payee.PostCode</td>
+                        <td>@payee.Phone</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap4.min.js"></script>
+    <link rel="stylesheet" href=
+"https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/dataTables.bootstrap4.min.css" />
+    
+    <script>
+        $(document).ready(function() {
+            $('#payees').DataTable({
+            });
+        } );
+    </script>
+}

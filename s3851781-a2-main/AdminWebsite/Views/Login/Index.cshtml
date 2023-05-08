@@ -1,0 +1,52 @@
+﻿@model IEnumerable<LoginDTO>
+@{
+    ViewData["Title"] = "Logins";
+}
+
+<h1>Logins Management</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.LoginID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CustomerID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Blocked)
+            </th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var item in Model) {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LoginID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CustomerID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Blocked)
+                </td>
+                <td>
+                    <form asp-action="ToggleBlockLogin">
+                        <input id="id" type="hidden" name="id" value="@item.LoginID" />
+                        <button type="submit" class="btn btn-primary">
+                            @if (item.Blocked) {
+                                <span>Unblock</span> 
+                            }
+                            else
+                            {
+                                <span>Block</span>
+                            }
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

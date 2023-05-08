@@ -1,0 +1,49 @@
+﻿@{
+    ViewData["Title"] = "Update Customer Profile Picture";
+}
+
+<div class="p-2"></div>
+<div>
+    <a asp-action="CustomerInformation">Back to My Profile</a>
+</div>
+<div class="p-2"></div>
+
+<h1 class="display-4">Update Customer Profile Picture</h1>
+@using (Html.BeginForm("UpdateProfilePicture", "Customer", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <input type="file" name="Image" id="Image" accept="image/png, image/gif, image/jpeg"/>
+    <input type="submit" value="Upload Image" />
+}
+
+<div class="p-2"></div>
+
+@section Scripts {
+    <script>
+        $('form').submit(function (e) {
+            e.preventDefault();
+
+            var formData = new FormData();
+            var imageFile = document.querySelector('#Image').files[0];
+            // get the image as a base64 string
+            var reader = new FileReader();
+            reader.readAsDataURL(imageFile);
+            reader.onload = function () {
+                var image = reader.result;
+                formData.append('Image', image);
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("UploadProfilePicture", "Customer")',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function (data) {
+                        window.location.href = '@Url.Action("CustomerInformation", "Customer")';
+                    },
+                    error: function (data) {
+                        alert("Error");
+                    }
+                });
+            };
+        });
+    </script>
+}

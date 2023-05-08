@@ -1,0 +1,107 @@
+﻿@model BillPayAndAlertsViewModel
+@{
+    ViewData["Title"] = "Bill Pay Alerts";
+}
+
+@functions{
+    public string GetBillPayTypeString(string accountType) {
+        switch (accountType) {
+            case "O":
+                return "One Time";
+            case "M":
+                return "Monthly";
+            default:
+                return "Unknown";
+        }
+    }
+
+    public string GetMoneyString(decimal amount)
+    {
+        return amount.ToString("C");
+    }
+}
+
+<div>
+    <div class="p-2"></div>
+    <h1 class="display-4">BillPay</h1>
+    <div class="p-2"></div>
+    <a class="btn btn-primary" asp-action="CreateBillPay">Create BillPay</a>
+    <a class="btn btn-primary" asp-action="Payees">See Payees</a>
+    <div class="p-2"></div>
+    @if (Model.HasAlerts)
+    {
+        <p class="alert-danger">You have one or more failed BillPay payments. Please review them.</p>
+        <a class="btn btn-primary" asp-action="Alerts">View Alerts</a>
+    }
+    
+    <div class="p-4"></div>
+    <table id="billpays" class="table table-striped table-bordered" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th>BillPayID</th>
+                <th>PayeeID</th>
+                <th>AccountNumber</th>
+                <th>Amount</th>
+                <th>ScheduleTimeUTC</th>
+                <th>Period</th>
+                <th>Active</th>
+                <th>Failed</th>
+                <th>Cancel</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                foreach (var billpay in Model.BillPays)
+                {
+                    <tr>
+                        <td>@billpay.BillPayID</td>
+                        <td>@billpay.PayeeID</td>
+                        <td>@billpay.AccountNumber</td>
+                        <td>@GetMoneyString(billpay.Amount)</td>
+                        <td>@billpay.ScheduleTimeUtc</td>
+                        <td>@GetBillPayTypeString(billpay.Period)</td>
+                        <td>@billpay.Active</td>
+                        <td>@billpay.Failed</td>
+                        <td>
+                            @{
+                                if (billpay.Active)
+                                {
+                                    <form asp-action="Alerts">
+                                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                        <input type="hidden" name="BillPayID" value="@billpay.BillPayID" />
+                                        <button type="submit" class="btn btn-primary">Cancel</button>
+                                    </form>
+                                }
+                                else
+                                {
+                                    <span>Not Active</span>
+                                }
+                            }
+                            
+
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap4.min.js"></script>
+    <link rel="stylesheet" href=
+"https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/dataTables.bootstrap4.min.css" />
+    
+    <script>
+        $(document).ready(function() {
+            $('#billpays').DataTable({
+                "order": [[0, "desc"]]
+            });
+        } );
+    </script>
+}

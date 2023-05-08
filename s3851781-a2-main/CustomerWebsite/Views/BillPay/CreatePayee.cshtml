@@ -1,0 +1,73 @@
+﻿@model Payee
+@{
+    ViewData["Title"] = "Create Payee";
+}
+
+<div class="p-2"></div>
+<div>
+    <a asp-action="Payees">Back to Payees</a>
+</div>
+<div class="p-2"></div>
+            
+<h1 class="display-4">Create Payee</h1>
+<form asp-action="CreatePayee">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="form-group">
+        <label for="Name" class="control-label">Name</label>
+        <input id="Name" name="Name" class="form-control"
+               value="@Model.Name"
+               data-val="true" />
+        @Html.ValidationMessage("Name", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        <label for="Address" class="control-label">Address</label>
+        <input id="Address" name="Address" class="form-control"
+               value="@Model.Address"
+               data-val="true" />
+        @Html.ValidationMessage("Address", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        <label for="City" class="control-label">City</label>
+        <input id="City" name="City" class="form-control"
+               value="@Model.City"
+               data-val="true" />
+        @Html.ValidationMessage("City", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        <label for="State" class="control-label">State</label>
+        <input id="State" name="State" class="form-control"
+               value="@Model.State"
+               data-val="true" />
+        @Html.ValidationMessage("State", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        <label for="PostCode" class="control-label">PostCode</label>
+        <input id="PostCode" name="PostCode" class="form-control"
+               value="@Model.PostCode"
+               data-val="true" />
+        @Html.ValidationMessage("PostCode", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        <label for="Phone" class="control-label">Phone</label>
+        <input id="Phone" name="Phone" class="form-control"
+               value="@Model.Phone"
+               data-val="true" />
+        @Html.ValidationMessage("Phone", new { @class = "text-danger" })
+    </div>
+
+
+    <input type="submit" value="Create" class="btn btn-primary" />
+</form>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
